@@ -43,5 +43,5 @@ curl -X POST http://localhost:3000/api/seed
 5. Create a `.env` file in the root directory with the following content:
 
 ```
-DATABASE_URL=postgres://postgres:password@localhost:5432/solaceassignment
+DATABASE_URL=postgres://<username>:<password>@localhost:5432/solaceassignment
 ```
