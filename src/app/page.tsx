@@ -17,7 +17,7 @@ export default function Home() {
 
   const showStatus = (msg: string) => {
     setStatus(msg);
-    setTimeout(() => setStatus(null), 2000);
+    setTimeout(() => setStatus(null), 1000);
   };
 
   useEffect(() => {
@@ -26,17 +26,18 @@ export default function Home() {
       const response = await fetch('/api/advocates');
       const jsonResponse = await response.json();
       setAdvocates(jsonResponse.data);
+      setVisibleCount(PAGE_SIZE);
       showStatus('Advocates loaded!');
     };
     fetchAdvocates();
   }, []);
 
-  function filterAdvocates(
+  const filterAdvocates = (
     advocates: Advocate[],
     searchTerm: string
-  ): Advocate[] {
+  ): Advocate[] => {
     const terms = searchTerm.trim().toLowerCase().split(/\s+/);
-    return advocates.filter((advocate) => {
+    const filtered = advocates.filter((advocate) => {
       const advocateProps: string[] = [
         advocate.firstName || '',
         advocate.lastName || '',
@@ -48,7 +49,8 @@ export default function Home() {
       ].map((v) => v.toLowerCase());
       return terms.every((searchToken) => advocateProps.some((advProp) => advProp.includes(searchToken)));
     });
-  }
+    return filtered;
+  };
 
   const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
@@ -61,9 +63,6 @@ export default function Home() {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
-    debounceRef.current = setTimeout(() => {
-      showStatus('Filter applied!');
-    }, 200);
   };
 
   const onClick = () => {
@@ -96,11 +95,6 @@ export default function Home() {
       }
     };
   }, [filteredAdvocates.length]);
-
-  // Reset visible count when filteredAdvocates changes
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [searchTerm, advocates]);
 
   return (
     <main className="m-0 flex flex-col gap-0 relative h-screen">

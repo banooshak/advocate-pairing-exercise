@@ -19,6 +19,7 @@
 The server side filtering works partially. When there are multiple tokens in the filter string the server side SQL query fails to return all advocates including every token. This can be solved later. 
 - **Infinite Scroll:** The infinite scroll loads more items but does not prevent duplicate loads if the user scrolls quickly. I would add a loading flag to prevent race conditions.
 - **API Filtering:** The API filtering logic is duplicated on both client and server. I would move all filtering to the backend for consistency and scalability.
+- **Limiting useEffect usage:** The useEffect hook usage must be limited to minimum. Use useState and event handling instead while handling the infinity scroll.
 
 ## Backend/API
 - **SQL Injection:** The API route builds SQL queries with template strings. I would ensure all user input is properly escaped and parameterized.
